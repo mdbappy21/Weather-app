@@ -1,5 +1,4 @@
 from tkinter import *
-import tkinter as tk
 from geopy.geocoders import Nominatim
 from tkinter import messagebox
 from timezonefinder import TimezoneFinder
@@ -40,7 +39,7 @@ def getWeather():
         name.config(text="CURRENT WEATHER")
 
         # weather
-        api = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=7f92f65c9bbad0af624cad44be979050"
+        api = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=7f92f65c9bbad0af624cad44be979050'
         json_data = requests.get(api).json()
         condition = json_data['weather'][0]['main']
         description = json_data['weather'][0]['description']
@@ -49,8 +48,28 @@ def getWeather():
         humidity = json_data['main']['humidity']
         wind = json_data['wind']['speed']
 
-        t.config(text=(temp, "°"))
-        c.config(text=(condition, "|", "FEELS", "LIKE", temp, "°"))
+        if "sunny" in description.lower() or 'Clear skies' in description.lower() or 'Sunny intervals' in description.lower():
+            Logo_image = PhotoImage(file="img/logo/sun.png")
+        elif 'windy' in description.lower() or 'breezy' in description.lower() or 'gale' in description.lower():
+            Logo_image = PhotoImage(file="img/logo/windy.png")
+        elif "snow" in description.lower() or 'light snow' in description.lower() or ' moderate snow ' in description.lower() or 'heavy snow' in description.lower() or 'wintry mix' in description.lower() or 'ice pellets' in description.lower():
+            Logo_image = PhotoImage(file="img/logo/snow.png")
+        elif 'rain' in description.lower() or 'showers thundery' in description.lower() or 'showers heavy' in description.lower() or 'rain light' in description.lower() or 'rain moderate' in description.lower() or 'rain passing' in description.lower() or ' showers squalls' in description.lower():
+            Logo_image = PhotoImage(file="img/logo/rain.png")
+        elif 'Partly cloudy' in description.lower() or 'cloudy' in description.lower() or 'overcast' in description.lower() or 'scattered clouds' in description.lower() or 'broken clouds' in description.lower() or 'fog' in description.lower() or 'mist' in description.lower() or "haze" in description.lower():
+            Logo_image = PhotoImage(file="img/logo/clouds.png")
+        elif 'thunderstorms' in description.lower() or 'lightning thunder' in description.lower() or 'cumulonimbus' in description.lower() or 'severe weather' in description.lower() or 'heavy' in description.lower() or 'hail tornadoes' in description.lower() or 'flash' in description.lower() or 'floods' in description.lower() or 'thunderstorm warnings' in description.lower() or "alerts" in description.lower():
+            Logo_image = PhotoImage(file="img/logo/logo.png")
+        else:
+            Logo_image = PhotoImage(file="img/logo/sun.png")
+
+            # Update the logo label with the new image
+        logo.configure(image=Logo_image)
+        logo.image = Logo_image  # Keep a reference to prevent garbage collection
+
+        formatted_temp = "{:.2f}".format(temp)
+        t.config(text=(formatted_temp, "°"))
+        c.config(text=(condition, "|", "FEELS", "LIKE", f"{formatted_temp}°"))
 
         w.config(text=wind)
         h.config(text=humidity)
@@ -61,7 +80,7 @@ def getWeather():
 
 
 # search box
-Search_image = PhotoImage(file="img/search.png")
+Search_image = PhotoImage(file="img/1search.png")
 myimage = Label(image=Search_image)
 myimage.place(x=220, y=18)
 
@@ -84,7 +103,7 @@ myimage_icon = Button(image=Search_icon, borderwidth=0, cursor="hand2", bg="#404
 myimage_icon.place(x=600, y=32)
 
 # logo
-Logo_image = PhotoImage(file="img/logo.png")
+Logo_image = PhotoImage(file="img/logo/sun.png")
 logo = Label(image=Logo_image)
 logo.place(x=300, y=100)
 
@@ -119,7 +138,7 @@ w.place(x=130, y=430)
 h = Label(text="...", font=("arial", 20, "bold"), bg="#1ab5ef")
 h.place(x=280, y=430)
 d = Label(text="...", font=("arial", 20, "bold"), bg="#1ab5ef")
-d.place(x=470, y=430)
+d.place(x=430, y=430)
 p = Label(text="...", font=("arial", 20, "bold"), bg="#1ab5ef")
 p.place(x=690, y=430)
 
